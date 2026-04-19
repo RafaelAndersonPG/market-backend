@@ -21,8 +21,8 @@ public class StallService {
     private static final Long MARKET_ID = 1L;
 
     public List<StallResponseDTO> getAll() {
-        List<Stall> stalls = stallRepository.findAll();
-        return stalls.stream()
+        return stallRepository.findAll()
+                .stream()
                 .map(this::convertToResponseDTO)
                 .toList();
     }
@@ -31,15 +31,18 @@ public class StallService {
         if (stallRepository.existsByName(stallRequestDTO.getName())) {
             throw new RuntimeException("El puesto ya existe");
         }
-        Owner market = ownerRepository.findById(MARKET_ID).orElseThrow(() -> new RuntimeException("Error crítico: La entidad Mercado (ID 1) no existe en la base de datos"));
-        Stall stall = new Stall();
-        stall.setName(stallRequestDTO.getName());
-        stall.setOwner(market);
+        Owner market = ownerRepository.findById(MARKET_ID)
+                .orElseThrow(() -> new RuntimeException("Error crítico: La entidad Mercado (ID 1) no existe en la base de datos"));
+        Stall stall = Stall.builder()
+                .name(stallRequestDTO.getName())
+                .owner(market)
+                .build();
         return convertToResponseDTO(stallRepository.save(stall));
     }
 
     public StallResponseDTO update(Long id, StallRequestDTO stallRequestDTO) {
-        Stall stall = stallRepository.findById(id).orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
+        Stall stall = stallRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
         if (stallRepository.existsByNameAndIdNot(stallRequestDTO.getName(), id)) {
             throw new RuntimeException("El número de puesto ya está siendo usado");
         }
@@ -48,7 +51,8 @@ public class StallService {
     }
 
     public void delete(Long id) {
-        Stall stall = stallRepository.findById(id).orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
+        Stall stall = stallRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
         stallRepository.deleteById(id);
     }
 
@@ -57,10 +61,10 @@ public class StallService {
     }
 
     private StallResponseDTO convertToResponseDTO(Stall stall) {
-        StallResponseDTO stallResponseDTO = objectMapper.convertValue(stall, StallResponseDTO.class);
-        if (stall.getOwner() != null) {
-            stallResponseDTO.setOwnerName(stall.getOwner().getName());
-        }
-        return stallResponseDTO;
+        return StallResponseDTO.builder()
+                .id(stall.getId())
+                .name(stall.getName())
+                .ownerName(stall.getOwner().getName())
+                .build();
     }
 }

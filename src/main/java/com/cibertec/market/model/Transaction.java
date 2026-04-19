@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Transaction {
@@ -17,13 +18,13 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private TransactionType type;
+    //@Enumerated(EnumType.STRING)
+    //private TransactionType type;
 
     private BigDecimal amount;
 
-    @ManyToOne
-    private DocumentType documentType;
+    //@ManyToOne
+    //private DocumentType documentType;
 
     @ManyToOne
     private Stall stall;

@@ -19,7 +19,7 @@ public class ChargeService {
     public List<ChargeResponseDTO> getAll(){
         return chargeRepository.findAll()
                 .stream()
-                .map(a -> objectMapper.convertValue(a, ChargeResponseDTO.class))
+                .map(this::convertToResponseDTO)
                 .toList();
     }
 
@@ -27,17 +27,28 @@ public class ChargeService {
         if (chargeRepository.existsByName(chargeRequestDTO.getName())) {
             throw new RuntimeException("El nombre fue registrado anteriormente");
         }
-        var charge = objectMapper.convertValue(chargeRequestDTO, Charge.class);
-        return objectMapper.convertValue(chargeRepository.save(charge), ChargeResponseDTO.class);
+        Charge charge = Charge.builder()
+                .name(chargeRequestDTO.getName())
+                .description(chargeRequestDTO.getDescription())
+                .amount(chargeRequestDTO.getAmount())
+                .build();
+        return convertToResponseDTO(chargeRepository.save(charge));
     }
 
     public ChargeResponseDTO update(Long id, ChargeRequestDTO chargeRequestDTO) {
+        if (!chargeRepository.existsById(id)) {
+            throw new RuntimeException("El cargo no existe");
+        }
         if (chargeRepository.existsByNameAndIdNot(chargeRequestDTO.getName(), id)) {
             throw new RuntimeException("El nombre ya está registrado");
         }
-        var charge = objectMapper.convertValue(chargeRequestDTO, Charge.class);
-        charge.setId(id);
-        return objectMapper.convertValue(chargeRepository.save(charge), ChargeResponseDTO.class);
+        Charge charge = Charge.builder()
+                .id(id)
+                .name(chargeRequestDTO.getName())
+                .description(chargeRequestDTO.getDescription())
+                .amount(chargeRequestDTO.getAmount())
+                .build();
+        return convertToResponseDTO(chargeRepository.save(charge));
     }
 
     public void delete(Long id) {
@@ -46,6 +57,14 @@ public class ChargeService {
 
     public boolean existID(Long id) {
         return chargeRepository.existsById(id);
+    }
+
+    private ChargeResponseDTO convertToResponseDTO(Charge charge) {
+        return ChargeResponseDTO.builder()
+                .id(charge.getId())
+                .name(charge.getName())
+                .amount(charge.getAmount())
+                .build();
     }
 
 }

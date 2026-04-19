@@ -1,19 +1,21 @@
 package com.cibertec.market.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StallRequestDTO {
+public class TransactionResponseDTO {
     private Long id;
-
-    @NotBlank(message = "Número del puesto no debe estar vacío")
-    private String name;
-
+    private Long stallId;
+    private BigDecimal amount;
+    private LocalDate date;
+    private String ownerDni;
 }
