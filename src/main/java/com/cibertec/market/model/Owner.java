@@ -1,27 +1,28 @@
 package com.cibertec.market.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@AllArgsConstructor
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Nombre del dueño no debe ser nulo")
+    @Column(nullable = false)
     private String name;
 
+    @Column(unique = true, nullable = false, length = 8)
+    private String dni;
+
     @OneToMany(mappedBy = "owner")
+    @JsonIgnore
     private List<Stall> stalls;
 }

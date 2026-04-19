@@ -2,19 +2,15 @@ package com.cibertec.market.model;
 
 import com.cibertec.market.enums.TransactionType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@NoArgsConstructor
-@Getter
-@Setter
-@AllArgsConstructor
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Transaction {
 
     @Id
