@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionRequestDTO {
+public class TransferRequestDTO {
     private Long id;
 
     @NotNull(message = "ID del puesto es obligatorio")

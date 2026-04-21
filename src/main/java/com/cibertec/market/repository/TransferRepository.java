@@ -1,12 +1,12 @@
 package com.cibertec.market.repository;
 
-import com.cibertec.market.model.Transaction;
+import com.cibertec.market.model.Transfer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-    List<Transaction> findAllByOrderByStallNameAsc();
+public interface TransferRepository extends JpaRepository<Transfer, Long> {
+    List<Transfer> findAllByOrderByStallNameAsc();
 }

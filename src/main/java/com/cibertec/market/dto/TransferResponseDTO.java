@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionResponseDTO {
+public class TransferResponseDTO {
     private Long id;
     private Long stallId;
     private BigDecimal amount;

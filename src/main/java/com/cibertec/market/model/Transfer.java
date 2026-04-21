@@ -1,6 +1,5 @@
 package com.cibertec.market.model;
 
-import com.cibertec.market.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,22 +11,16 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Transaction {
+public class Transfer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //@Enumerated(EnumType.STRING)
-    //private TransactionType type;
-
     private BigDecimal amount;
 
-    //@ManyToOne
-    //private DocumentType documentType;
+    private LocalDate date;
 
     @ManyToOne
     private Stall stall;
-
-    private LocalDate date;
 }
