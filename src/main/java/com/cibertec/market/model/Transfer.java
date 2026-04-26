@@ -17,10 +17,13 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @Column(nullable = false, updatable = false)
     private LocalDate date;
 
     @ManyToOne
+    @JoinColumn(name = "stall_id", nullable = false)
     private Stall stall;
 }
