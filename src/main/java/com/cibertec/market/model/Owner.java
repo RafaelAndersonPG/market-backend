@@ -20,7 +20,7 @@ public class Owner {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = false, length = 8)
+    @Column(unique = true, nullable = true, length = 8)
     private String dni;
 
     @OneToMany(mappedBy = "owner")
