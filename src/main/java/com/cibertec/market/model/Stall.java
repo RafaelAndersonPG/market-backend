@@ -18,6 +18,6 @@ public class Stall {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id",nullable = false)
+    @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
 }

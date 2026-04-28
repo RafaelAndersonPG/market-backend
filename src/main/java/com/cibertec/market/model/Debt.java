@@ -17,15 +17,26 @@ public class Debt {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Integer year;
+
+    @Column(nullable = false)
     private Integer month;
 
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private Boolean paid = false;
 
     @ManyToOne
+    @JoinColumn(name = "charge_id", nullable = false)
+    private Charge charge;
+
+    @ManyToOne
+    @JoinColumn(name = "stall_id",nullable = false)
     private Stall stall;
 }

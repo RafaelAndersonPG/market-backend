@@ -1,28 +1,32 @@
 package com.cibertec.market.model;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal amount;
+    @Column(nullable = false)
+    private LocalDateTime paymentDate;
 
-    private LocalDateTime date;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal amountPaid;
 
-    @ManyToOne
-    private Stall stall;
-
-    @ManyToOne
-    private DocumentType documentType;
+    @OneToOne
+    @JoinColumn(name = "debt_id", nullable = false, unique = true)
+    private Debt debt;
 }
