@@ -63,6 +63,7 @@ public class ChargeService {
         return ChargeResponseDTO.builder()
                 .id(charge.getId())
                 .name(charge.getName())
+                .description(charge.getDescription())
                 .amount(charge.getAmount())
                 .build();
     }

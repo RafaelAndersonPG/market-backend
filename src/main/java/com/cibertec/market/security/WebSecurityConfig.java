@@ -22,6 +22,11 @@ public class WebSecurityConfig {
                         auth
                                 .requestMatchers(HttpMethod.GET, "/usuarios/unprotected").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
+                                .requestMatchers("/cargo/**").permitAll()
+                                .requestMatchers("/deuda/**").permitAll()
+                                .requestMatchers("/pago/**").permitAll()
+                                .requestMatchers("/puesto/**").permitAll()
+                                .requestMatchers("/traspaso/**").permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);

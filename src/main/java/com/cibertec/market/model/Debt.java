@@ -2,6 +2,7 @@ package com.cibertec.market.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,8 +10,10 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"stall_id", "charge_id", "year", "month"}) })
 public class Debt {
 
     @Id

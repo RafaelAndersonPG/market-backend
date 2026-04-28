@@ -6,16 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TransactionResponseDTO {
+public class DebtResponseDTO {
     private Long id;
-    private Long stallId;
+
+    private String stallName;
+    private String chargeName;
     private BigDecimal amount;
-    private LocalDate date;
-    private String ownerDni;
+    private String period;
+    private Boolean paid;
 }
