@@ -2,6 +2,7 @@ package com.cibertec.market.service.impl;
 
 import com.cibertec.market.dto.DebtRequestDTO;
 import com.cibertec.market.dto.DebtResponseDTO;
+import com.cibertec.market.exception.BusinessException;
 import com.cibertec.market.model.Charge;
 import com.cibertec.market.model.Debt;
 import com.cibertec.market.model.Stall;
@@ -36,7 +37,7 @@ public class DebtServiceImpl implements DebtsService {
                 debtRequestDTO.getYear(),
                 debtRequestDTO.getMonth());
         if (exists) {
-            throw new RuntimeException("Ya existe una deuda de este tipo para el puesto en el periodo seleccionado.");
+            throw new BusinessException("Ya existe una deuda de este tipo para el puesto en el periodo seleccionado.");
         }
         Stall stall = stallRepository.findById(debtRequestDTO.getStallId())
                 .orElseThrow(() -> new RuntimeException("Puesto no encontrado"));
@@ -48,6 +49,7 @@ public class DebtServiceImpl implements DebtsService {
                 .year(debtRequestDTO.getYear())
                 .month(debtRequestDTO.getMonth())
                 .description(charge.getName())
+                .amount(debtRequestDTO.getAmount())
                 .paid(false)
                 .build();
         return convertToResponseDTO(debtRepository.save(debt));

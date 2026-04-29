@@ -24,11 +24,7 @@ public class DebtController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody DebtRequestDTO debtRequestDTO) {
-        try {
-            return ResponseEntity.status(HttpStatus.CREATED).body(debtsService.save(debtRequestDTO));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(debtsService.save(debtRequestDTO));
     }
 
     @GetMapping("/pendientes/{stallId}")

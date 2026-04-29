@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,4 +31,6 @@ public class DebtRequestDTO {
     @Min(value = 1, message = "El mes debe ser como mínimo 1 (Enero)")
     @Max(value = 12, message = "El mes debe ser como máximo 12 (Diciembre)")
     private Integer month;
+
+    private BigDecimal amount;
 }

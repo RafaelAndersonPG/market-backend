@@ -2,11 +2,16 @@ package com.cibertec.market.service.impl;
 
 import com.cibertec.market.dto.PaymentRequestDTO;
 import com.cibertec.market.dto.PaymentResponseDTO;
+import com.cibertec.market.dto.TransactionRequestDTO;
+import com.cibertec.market.enums.TransactionType;
+import com.cibertec.market.exception.BusinessException;
+import com.cibertec.market.exception.ResourceNotFoundException;
 import com.cibertec.market.model.Debt;
 import com.cibertec.market.model.Payment;
 import com.cibertec.market.repository.DebtRepository;
 import com.cibertec.market.repository.PaymentRepository;
 import com.cibertec.market.service.PaymentService;
+import com.cibertec.market.service.TransactionService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,41 +24,79 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final DebtRepository debtRepository;
+    private final TransactionService transactionService;
 
+    @Override
     @Transactional
-    public PaymentResponseDTO registerPayment(PaymentRequestDTO paymentRequestDTO) {
-        Debt debt = debtRepository.findById(paymentRequestDTO.getDebtId())
-                .orElseThrow(() -> new RuntimeException("Deuda no encontrada"));
-        if (debt.getPaid()) {
-            throw new RuntimeException("Esta deuda ya ha sido cancelada anteriormente.");
+    public PaymentResponseDTO registerPayment(PaymentRequestDTO request) {
+
+        Debt debt = findDebtOrThrow(request.getDebtId());
+
+        validateDebtNotPaid(debt);
+
+        debt.setPaid(true);
+
+        Payment payment = buildPayment(debt);
+        Payment savedPayment = paymentRepository.save(payment);
+
+        registerExpenseTransaction(request, debt);
+
+        return convertToResponseDTO(savedPayment);
+    }
+
+    @Override
+    @Transactional
+    public List<PaymentResponseDTO> payAllDebtsByStall(Long stallId) {
+
+        List<Debt> debts = debtRepository.findByStallIdAndPaidFalse(stallId);
+
+        if (debts.isEmpty()) {
+            throw new BusinessException("El puesto no tiene deudas pendientes.");
         }
-        Payment payment = Payment.builder()
+
+        List<Payment> payments = debts.stream()
+                .map(this::payDebt)
+                .toList();
+
+        return paymentRepository.saveAll(payments)
+                .stream()
+                .map(this::convertToResponseDTO)
+                .toList();
+    }
+
+    private Debt findDebtOrThrow(Long id) {
+        return debtRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Deuda no encontrada"));
+    }
+
+    private void validateDebtNotPaid(Debt debt) {
+        if (Boolean.TRUE.equals(debt.getPaid())) {
+            throw new BusinessException("Esta deuda ya ha sido cancelada anteriormente.");
+        }
+    }
+
+    private Payment payDebt(Debt debt) {
+        debt.setPaid(true);
+        return buildPayment(debt);
+    }
+
+    private Payment buildPayment(Debt debt) {
+        return Payment.builder()
                 .paymentDate(LocalDateTime.now())
                 .amountPaid(debt.getAmount())
                 .debt(debt)
                 .build();
-        debt.setPaid(true);
-        debtRepository.save(debt);
-        return convertToResponseDTO(paymentRepository.save(payment));
     }
 
-    @Transactional
-    public List<PaymentResponseDTO> payAllDebtsByStall(Long stallId) {
-        List<Debt> pendingDebts = debtRepository.findByStallIdAndPaidFalse(stallId);
-        if (pendingDebts.isEmpty()) {
-            throw new RuntimeException("El puesto no tiene deudas pendientes.");
-        }
-        List<Payment> payments = pendingDebts.stream().map(debt -> {
-            debt.setPaid(true);
-            return Payment.builder()
-                    .paymentDate(LocalDateTime.now())
-                    .amountPaid(debt.getAmount())
-                    .debt(debt)
-                    .build();
-        }).toList();
-        return paymentRepository.saveAll(payments).stream()
-                .map(this::convertToResponseDTO)
-                .toList();
+    private void registerExpenseTransaction(PaymentRequestDTO request, Debt debt) {
+        TransactionRequestDTO tx = TransactionRequestDTO.builder()
+                .accountId(request.getAccountId())
+                .amount(debt.getAmount())
+                .type(TransactionType.EXPENSE)
+                .description(request.getDescription())
+                .build();
+
+        transactionService.registerTransaction(tx);
     }
 
     private PaymentResponseDTO convertToResponseDTO(Payment payment) {
