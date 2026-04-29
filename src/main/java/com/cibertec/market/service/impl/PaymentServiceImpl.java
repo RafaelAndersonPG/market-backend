@@ -48,7 +48,7 @@ public class PaymentServiceImpl implements PaymentService {
     @Transactional
     public List<PaymentResponseDTO> payAllDebtsByStall(Long stallId) {
 
-        List<Debt> debts = debtRepository.findByStallIdAndPaidFalse(stallId);
+        List<Debt> debts = debtRepository.findByStallIdOrderByYearDescMonthDesc(stallId);
 
         if (debts.isEmpty()) {
             throw new BusinessException("El puesto no tiene deudas pendientes.");

@@ -5,7 +5,6 @@ import com.cibertec.market.repository.UserRepository;
 import com.cibertec.market.security.JWTAuthenticationConfig;
 import com.cibertec.market.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

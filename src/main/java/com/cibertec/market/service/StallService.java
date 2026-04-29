@@ -11,5 +11,4 @@ public interface StallService {
     StallResponseDTO save(StallRequestDTO stallRequestDTO);
     StallResponseDTO update(Long id, StallRequestDTO stallRequestDTO);
     void delete(Long id);
-    boolean existID(Long id);
 }
