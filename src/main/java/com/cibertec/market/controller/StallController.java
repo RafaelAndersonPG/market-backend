@@ -14,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/puesto")
 public class StallController {
+
     private final StallService stallService;
 
     @GetMapping
@@ -32,7 +33,7 @@ public class StallController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody @Valid StallRequestDTO stallRequestDTO) {
-        if (!stallService.existID(id)) {
+        if (stallService.existID(id)) {
             return ResponseEntity.notFound().build();
         }
         try {
@@ -44,7 +45,7 @@ public class StallController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (!stallService.existID(id)) {
+        if (stallService.existID(id)) {
             return ResponseEntity.notFound().build();
         }
         stallService.delete(id);

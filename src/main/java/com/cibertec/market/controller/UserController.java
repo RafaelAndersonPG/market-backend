@@ -22,32 +22,12 @@ public class UserController {
     private final JWTAuthenticationConfig jwtAuthenticationConfig;
     private final UserService userService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Object>> getUsuarios() {
-        List<Object> list = new ArrayList<>();
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
 
-    @GetMapping("/unprotected")
-    public ResponseEntity<List<Object>> getUnprotected() {
-        List<Object> list = new ArrayList<>();
-        return new ResponseEntity<>(list, HttpStatus.OK);
-    }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDTO loginDTO) {
 
-        User user = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
-
-        if (user == null) {
-            throw new UsernameNotFoundException("Credenciales inválidas");
-        }
-
-        String token = jwtAuthenticationConfig.getJWTToken(
-                user.getUsername(),
-                user.getName(),
-                user.getLastname()
-        );
+        String token = userService.login(loginDTO.getUsername(), loginDTO.getPassword());
 
         return ResponseEntity.ok(new AuthResponseDto(token));
     }

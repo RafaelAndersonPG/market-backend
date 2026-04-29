@@ -20,4 +20,7 @@ public class Stall {
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)
     private Owner owner;
+
+    @OneToOne(mappedBy = "stall")
+    private Account account;
 }

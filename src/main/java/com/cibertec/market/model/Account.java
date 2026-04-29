@@ -1,11 +1,10 @@
 package com.cibertec.market.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -23,4 +22,8 @@ public class Account {
     private String number;
 
     private BigDecimal balance;
+
+    @OneToOne
+    @JoinColumn(name = "stall_id", unique = true)
+    private Stall stall;
 }

@@ -21,7 +21,4 @@ public class Charge {
 
     @Column(nullable = false)
     private String description;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal amount;
 }

@@ -6,8 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 public class WebSecurityConfig {
@@ -16,17 +19,19 @@ public class WebSecurityConfig {
     private JWTAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource configurationSource) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(configurationSource))
                 .authorizeHttpRequests(auth ->
                         auth
+                                .requestMatchers("/error").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/usuarios/unprotected").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/usuarios/login").permitAll()
-                                .requestMatchers("/cargo/**").permitAll()
-                                .requestMatchers("/deuda/**").permitAll()
-                                .requestMatchers("/pago/**").permitAll()
-                                .requestMatchers("/puesto/**").permitAll()
-                                .requestMatchers("/traspaso/**").permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);

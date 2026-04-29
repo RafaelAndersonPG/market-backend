@@ -11,4 +11,6 @@ public interface DebtRepository extends JpaRepository<Debt, Long> {
     List<Debt> findByStallIdAndPaidFalse(Long stallId);
 
     boolean existsByStallIdAndChargeIdAndYearAndMonth(Long stallId, Long chargeId, Integer year, Integer month);
+
+    boolean existsByChargeId(Long chargeId);
 }

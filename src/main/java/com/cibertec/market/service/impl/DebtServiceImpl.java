@@ -1,4 +1,4 @@
-package com.cibertec.market.service;
+package com.cibertec.market.service.impl;
 
 import com.cibertec.market.dto.DebtRequestDTO;
 import com.cibertec.market.dto.DebtResponseDTO;
@@ -8,6 +8,7 @@ import com.cibertec.market.model.Stall;
 import com.cibertec.market.repository.ChargeRepository;
 import com.cibertec.market.repository.DebtRepository;
 import com.cibertec.market.repository.StallRepository;
+import com.cibertec.market.service.DebtsService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DebtService {
+public class DebtServiceImpl implements DebtsService {
     private final DebtRepository debtRepository;
     private final StallRepository stallRepository;
     private final ChargeRepository chargeRepository;
@@ -46,7 +47,6 @@ public class DebtService {
                 .charge(charge)
                 .year(debtRequestDTO.getYear())
                 .month(debtRequestDTO.getMonth())
-                .amount(charge.getAmount())
                 .description(charge.getName())
                 .paid(false)
                 .build();

@@ -22,8 +22,4 @@ public class ChargeRequestDTO {
 
     @NotBlank(message = "Ingrese la descripción")
     private String description;
-
-    @NotNull(message = "Ingrese el monto")
-    @Positive(message = "El monto debe ser un valor positivo")
-    private BigDecimal amount;
 }

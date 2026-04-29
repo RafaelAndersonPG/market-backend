@@ -2,8 +2,10 @@ package com.cibertec.market.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class Owner {
     @Column(nullable = false)
     private String name;
 
-    @Column(unique = true, nullable = true, length = 8)
+    @Column(unique = true, length = 8)
     private String dni;
 
     @OneToMany(mappedBy = "owner")

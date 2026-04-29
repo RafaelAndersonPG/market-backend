@@ -17,7 +17,4 @@ public class ChargeResponseDTO {
     private String name;
 
     private String description;
-
-    private BigDecimal amount;
-
 }

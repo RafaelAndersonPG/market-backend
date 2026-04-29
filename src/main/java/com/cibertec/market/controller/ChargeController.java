@@ -42,5 +42,4 @@ public class ChargeController {
         chargeService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 }
