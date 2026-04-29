@@ -1,9 +1,10 @@
 package com.cibertec.market.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-
-import java.math.BigDecimal;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data

@@ -3,6 +3,7 @@ package com.cibertec.market.service.impl;
 import com.cibertec.market.dto.TransactionDTO;
 import com.cibertec.market.dto.TransactionRequestDTO;
 import com.cibertec.market.enums.TransactionType;
+import com.cibertec.market.exception.BusinessException;
 import com.cibertec.market.exception.ResourceNotFoundException;
 import com.cibertec.market.model.Account;
 import com.cibertec.market.model.Transaction;
@@ -13,6 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -65,7 +67,13 @@ public class TransactionServiceImpl implements TransactionService {
         if (dto.getType() == TransactionType.INCOME) {
             account.setBalance(account.getBalance().add(dto.getAmount()));
         } else {
-            account.setBalance(account.getBalance().subtract(dto.getAmount()));
+            BigDecimal diferencia = account.getBalance().subtract(dto.getAmount());
+
+            if (diferencia.compareTo(BigDecimal.ZERO) < 0) {
+                throw new BusinessException("Saldo insuficiente");
+            }
+
+            account.setBalance(diferencia);
         }
 
         accountRepository.save(account);

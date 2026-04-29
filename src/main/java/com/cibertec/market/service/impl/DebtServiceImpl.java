@@ -56,7 +56,7 @@ public class DebtServiceImpl implements DebtsService {
     }
 
     public List<DebtResponseDTO> getPendingDebtsByStall(Long stallId) {
-        return debtRepository.findByStallIdAndPaidFalse(stallId).stream()
+        return debtRepository.findByStallIdOrderByYearDescMonthDesc(stallId).stream()
                 .map(this::convertToResponseDTO)
                 .toList();
     }
@@ -67,7 +67,7 @@ public class DebtServiceImpl implements DebtsService {
                 .stallName(debt.getStall().getName())
                 .chargeName(debt.getCharge().getName())
                 .amount(debt.getAmount())
-                .period(debt.getMonth() + "/" + debt.getYear())
+                .period(String.format("%02d/%d", debt.getMonth(), debt.getYear()))
                 .paid(debt.getPaid())
                 .build();
     }

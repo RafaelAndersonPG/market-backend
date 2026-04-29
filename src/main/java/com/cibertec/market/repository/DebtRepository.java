@@ -8,7 +8,7 @@ import java.util.List;
 
 @Repository
 public interface DebtRepository extends JpaRepository<Debt, Long> {
-    List<Debt> findByStallIdAndPaidFalse(Long stallId);
+    List<Debt> findByStallIdOrderByYearDescMonthDesc(Long stallId);
 
     boolean existsByStallIdAndChargeIdAndYearAndMonth(Long stallId, Long chargeId, Integer year, Integer month);
 

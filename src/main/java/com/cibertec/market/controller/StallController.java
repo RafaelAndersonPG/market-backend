@@ -24,30 +24,16 @@ public class StallController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody @Valid StallRequestDTO stallRequestDTO) {
-        try {
-            return ResponseEntity.status(201).body(stallService.save(stallRequestDTO));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.status(201).body(stallService.save(stallRequestDTO));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> edit(@PathVariable Long id, @RequestBody @Valid StallRequestDTO stallRequestDTO) {
-        if (stallService.existID(id)) {
-            return ResponseEntity.notFound().build();
-        }
-        try {
-            return ResponseEntity.status(201).body(stallService.update(id, stallRequestDTO));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        return ResponseEntity.status(201).body(stallService.update(id, stallRequestDTO));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if (stallService.existID(id)) {
-            return ResponseEntity.notFound().build();
-        }
         stallService.delete(id);
         return ResponseEntity.noContent().build();
     }
